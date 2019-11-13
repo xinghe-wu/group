@@ -1,0 +1,141 @@
+<template>
+  <div>
+        <transition :name="transitionName">
+          <router-view v-if="isRouterAlive" />
+        </transition>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "App",
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
+  data() {
+    return {
+      isShowTabbar: true,
+      transitionName: "slide-left",
+      pathList: [],
+      isRouterAlive: true
+    };
+  },
+  created() {
+    //在页面加载时读取sessionStorage里的状态信息
+
+    if (sessionStorage.getItem("store")) {
+      this.$store.replaceState(
+        Object.assign(
+          {},
+          this.$store.state,
+          JSON.parse(sessionStorage.getItem("store"))
+        )
+      );
+    }
+
+    //在页面刷新时将vuex里的信息保存到sessionStorage里
+
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.setItem("store", JSON.stringify(this.$store.state));
+    });
+  },
+  methods: {
+    reload () {
+      this.isRouterAlive = false
+      this.$nextTick(function () {
+        this.isRouterAlive = true
+      })
+    }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.path == "/home/shoppingcart") {
+        sessionStorage.setItem("toPath", to.path);
+        this.isShowShopCart = false;
+      } else {
+        this.isShowShopCart = true;
+      }
+      if (to.name == "goodsdetail") {
+        sessionStorage.setItem("fromDetail", from.path);
+      }
+      if (to.path == "/order/createorder") {
+        sessionStorage.setItem("fromPath", from.path);
+      }
+      if (to.path == "/order/createorder") {
+        sessionStorage.setItem("fromPathToOrderDetail", from.path);
+      }
+
+      if (this.pathList.includes(to.path)) {
+        var index = this.pathList.findIndex(() => {
+          return from.path;
+        });
+        this.pathList.splice(index, 1);
+        this.$router.isBack = true;
+      } else {
+        this.pathList.push(to.path);
+        this.$router.isBack = false;
+      }
+      if (to.path === "/home") {
+        // 'home'为首页
+        this.$router.isBack = true;
+        this.pathList = [];
+      }
+      var isBack = this.$router.isBack;
+      if (isBack) {
+        this.transitionName = "slide-right";
+      } else {
+        this.transitionName = "slide-left";
+      }
+      this.$router.isBack = false;
+    }
+  }
+};
+</script>
+
+<style lang="less" scoped>
+
+#app {
+  width: 100%;
+  //解决出现横向滚动条问题
+  overflow-x: hidden;
+}
+.slide-left-enter-active {
+  transition: all 0.35s ease;
+}
+.slide-left-leave-active {
+  transition: all 0.35s ease;
+
+}
+.slide-left-enter {
+  transform: translateX(100%);
+
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+  position: absolute;
+}
+
+.slide-right-enter-active {
+  transition: all 0.35s ease;
+
+}
+.slide-right-leave-active {
+  transition: all 0.35s ease;
+}
+.slide-right-enter {
+  transform: translateX(-100%);
+
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+  position: absolute;
+
+}
+</style>
+
+
+

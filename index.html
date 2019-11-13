@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<!--宽度为设备的宽度，默认不缩放，不允许用户缩放（即禁止缩放），在网页加载时隐藏地址栏与导航栏-->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui" />
+    <!--是否启动webapp功能，会删除默认的苹果工具栏和菜单栏。-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!--当启动webapp功能时，显示手机信号、时间、电池的顶部导航栏的颜色。默认值为default（白色），可以定为black（黑色）和black-translucent（灰色半透明）。-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="blank" />
+    <!--忽略页面中的数字识别为电话号码和email-->
+    <meta name="format-detection" content="telephone=no, email=no" />
+
+    <!-- 启用360浏览器的极速模式(webkit) -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+    <meta name="HandheldFriendly" content="true">
+    <!-- 微软的老式浏览器 -->
+    <meta name="MobileOptimized" content="320">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!-- UC强制全屏 -->
+    <meta name="full-screen" content="yes">
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <!-- windows phone 点击无高光 -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <title></title>
+
+    <link rel="stylesheet" href="./static/css/reset.css">
+    <link rel="stylesheet" href="https://unpkg.com/mint-ui@2.2.13/lib/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/4.5.0/css/swiper.min.css">
+
+    <script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
+    <!-- <script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.min.js"></script> -->
+    <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/mint-ui@2.2.13/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/Swiper/4.5.0/js/swiper.min.js"></script>
+    <script src="https://unpkg.com/better-scroll@1.15.2/dist/bscroll.min.js"></script>
+    <script src="https://unpkg.com/vue-scroller@2.2.4/dist/vue-scroller.min.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+  <script>
+
+
+    function browserRedirect() {
+      //var W = $(window).width()
+      var sUserAgent = navigator.userAgent.toLowerCase();
+      var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+
+      if (bIsIpad) {
+        return true
+      } else {
+        return false
+      }
+    }
+
+
+      try {
+        (function (doc, win) {
+          var docEl = doc.documentElement,
+            // 手机旋转事件,大部分手机浏览器都支持 onorientationchange 如果不支持，可以使用原始的 resize
+              resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+              recalc = function () {
+                //clientWidth: 获取对象可见内容的宽度，不包括滚动条，不包括边框
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                if (browserRedirect()) {
+                  docEl.style.fontSize = 80 + 'px';
+                }else{
+                  docEl.style.fontSize = 100*(clientWidth / 750) + 'px';
+                }
+              };
+
+          recalc();
+          //判断是否支持监听事件 ，不支持则停止
+          if (!doc.addEventListener) return;
+          //注册翻转事件
+          win.addEventListener(resizeEvt, recalc, false);
+
+        })(document, window);
+      } catch (error) {
+        document.getElementsByTagName('html').style.fontSize = '312.5%'
+      }
+  </script>
+  <script src="./static/js/vconsole.js"></script>
+  <script>
+    var vConsole = new VConsole();
+  </script>
+  <script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.min.js"></script>
+</html>

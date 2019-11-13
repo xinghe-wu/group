@@ -1,0 +1,333 @@
+<template>
+    <div class="release">
+        <div class="list-wrap" ref="listContent">
+            <ul ref="ul">
+                <li class="tip top-tip" v-show="!topLoadingShow"><i class="iconfont icon-totop" :class="topTip == '松开立即刷新' ? 'rotate' : ''"></i>{{topTip}}</li>
+                <li v-show="topLoadingShow"><Loading/></li>
+                <li class="no-data" v-if="!orderList.length && pageStatus == 2"><noData/></li>
+                <li class="order-list-item" v-for="(item,index) in orderList" :key="index"  @click="goToOrderDetail(item.orderId,item.orderNo)">
+                    <div class="line"></div>
+                    <div class="order-number">
+                        <div class="order-number-top">
+                            <p>
+                                <span>订单编号:</span>
+                                <span>{{item.orderId}}</span>
+                                <span></span>
+                            </p>
+                            <div class="the-order-status">
+                                {{item.ordStatusStr}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-goodsinfo" v-for="(arritem,index) in item.detList" :key="index">
+                        <div class="goods-img">
+                            <img v-lazy="arritem.imgSmall"/>
+                        </div>
+                        <div class="goods-title">{{arritem.goodsName}}</div>
+                        <div class="goods-params">
+                            <div class="goods-price">￥{{arritem.goodsPrice}}</div>
+                            <div class="goods-number">x {{arritem.goodsQty}}</div>
+                        </div>
+                    </div>
+                    <div class="the-order-amount">
+                        <span>共1件</span>
+                        <span>应付总额:</span>
+                        <span>￥{{item.orderAmt}}</span>
+
+                    </div>
+                    <div class="bottom-wrap">
+                        <div class="cancel-roder item-btn" @click.stop="cancelOrder(item.orderId)" v-if="item.orderStatus==0||item.orderStatus==6">
+                            取消订单
+                        </div>
+                        <div class="cancel-roder item-btn" v-if="item.orderStatus==1 || item.orderStatus==2 || item.orderStatus==3 " @click.stop="deleteOrder(item.orderId,index)">
+                            删除订单
+                        </div>
+                        <div class="cancel-roder item-btn" v-if="item.orderStatus==11" @click.stop="yesReceipt(item.orderId)">
+                            确定收货
+                        </div>
+                        <!-- <div class="cancel-roder item-btn" v-if="item.orderStatus==11">
+                            查看物流
+                        </div> -->
+                        <!-- <div class="cancel-roder item-btn" v-if="item.orderStatus==5">
+                            退款/退货
+                        </div> -->
+                        <div class="cancel-roder item-btn" v-if="item.orderStatus==90">
+                            退款已完成
+                        </div>
+                        <div class="payment item-btn" v-if="item.orderStatus==0||item.orderStatus==6">
+                            付款
+                        </div>
+                        <div class="payment item-btn" v-if="item.orderStatus==5&& item.tranType==1" @click.stop="toUsed(item.orderId)">
+                            去使用
+                        </div>
+                    </div>
+                </li>
+                <li v-show="bottomLoadingShow"><Loading/></li>
+                <li v-show="bottomLineShow"><BottomLine/></li>
+            </ul>
+        </div>
+    </div>
+</template>
+<script>
+import BScroll from 'better-scroll'
+import Loading from './bottom-loading'
+import BottomLine from './bottom-line'
+import noData from './nooder'
+export default {
+    props:{
+        orderList:{
+            type:Array,
+            required:true
+        },
+    },
+    data() {
+        return {
+            topTip: '下拉刷新',
+            topLoadingShow: false,
+            bottomLoadingShow: false,
+            bottomLineShow: false,
+            pageStatus: 0
+        }
+    },
+    mounted(){
+
+    },
+    methods: {
+        _initScroll() {
+            this.$nextTick(()=>{
+                if(!this.scroll){
+                this.scroll = new BScroll(this.$refs.listContent,{
+                    probeType: 1,
+                    click:true,
+                    pullUpLoad: {
+                    threshold: -50 // 当上拉距离超过50px时触发 pullingUp 事件
+                    }
+                });
+                this.refreshLoading()
+                }else{
+                this.scroll.refresh();
+                }
+            });
+        },
+        //上拉刷新 下拉加载
+        refreshLoading() {
+            // 滑动中
+            var _this = this
+            this.scroll.on('scroll', function (position) {
+                if(position.y > 60) {
+                _this.topTip = '松开立即刷新'
+                }/* else if(position.y < (this.maxScrollY - 50)) {
+                if(!_this.bottomLineShow) {
+                    _this.bottomStatus = '释放加载更多'
+                }
+                } */
+            });
+            /*
+            * @ touchend:滑动结束的状态
+            * @ maxScrollY:屏幕最大滚动高度
+            */
+            // 滑动结束
+            this.scroll.on('touchEnd', function (position) {
+                if (position.y > 60) {
+                //执行父组件下拉刷新函数
+                _this.topLoadingShow = true
+                _this.topTip = ''
+                // _this.scroll.refresh();
+                setTimeout(function () {
+                    _this.$emit('onchangelist', false)
+                }, 600);
+                }/* else if(position.y < (this.maxScrollY - 30)) {
+                if(!_this.bottomLineShow) {
+                    _this.bottomStatus = ''
+                    _this.bottomLoadingShow = true
+                    // _this.scroll.refresh();//
+                    // _this.scroll.scrollTo(0,this.maxScrollY + 800)
+                    //执行父组件上拉加载函数
+
+                    // _this.scroll.refresh();
+                    // bottomStatus.innerText = '加载中...';
+                    setTimeout(function () {
+                    _this.$emit('onchangelist', true)
+                    }, 600);
+                }
+                } */
+            });
+            this.scroll.on('pullingUp', () => {
+                if(!_this.bottomLineShow) {
+                // _this.bottomStatus = ''
+                _this.bottomLoadingShow = true
+                // console.log(_this.scroll)
+                // _this.$refs.ul.style.height = (_this.scroll.scrollerHeight + 30) + 'px'
+                // _this.scroll.refresh();//
+                // _this.scroll.scrollTo(0,this.maxScrollY + 800)
+                //执行父组件上拉加载函数
+
+                // _this.scroll.refresh();
+                // bottomStatus.innerText = '加载中...';
+                setTimeout(function () {
+                    _this.$emit('onchangelist', true)
+                }, 600);
+                }
+            })
+        },
+        goToOrderDetail(orderId,orderNo){//点击商品进入商品详情页
+            sessionStorage.setItem('orderId',orderId)
+            sessionStorage.setItem('orderNo',orderNo)
+            this.$router.push('/order/orderdetail')
+        },
+        cancelOrder(orderId){//取消订单
+            this.$emit('cancelOrder',orderId)
+        },
+        toUsed(orderId){//去使用
+           window.location.replace('https://tt.mylmyx.com/group/?system=web#/order-detail?orderId='+orderId)
+        },
+        deleteOrder(orderId){
+            this.$emit('deleteOrder',orderId)
+        },
+        yesReceipt(orderId){
+            this.$emit('yesReceipt',orderId)
+        }
+    },
+    components: {
+        Loading,
+        BottomLine,
+        noData
+    }
+}
+</script>
+<style lang="less" scoped>
+.order-list-item{
+    width: 100%;
+    font-size: 0.26rem;
+    .order-number{
+        width: 90%;
+        height: 0.8rem;
+        padding: 0 5%;
+        .order-number-top{
+            width: 100%;
+            height: 0.8rem;
+            display: flex;
+            line-height: 0.8rem;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.26rem;
+        }
+        .the-order-status{
+            color:#FF060A
+        }
+
+    }
+    .order-goodsinfo{
+            width: 90%;
+            display: flex;
+            padding: 0 5%;
+            justify-content: start;
+            font-size: 0.26rem;
+            padding-bottom:0.2rem;
+            .goods-img{
+                width: 1.7rem;
+                height: 1.7rem;
+                margin-right: 2%;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                    font-size: 0
+                }
+            }
+            .goods-title{
+                flex: 1;
+                line-height: 0.44rem;
+                max-height: 1.7rem;
+                overflow: hidden;
+            }
+            .goods-price{
+                margin-bottom: 0.4rem;
+            }
+            .goods-number{
+                text-align: center
+            }
+    }
+    .the-order-amount{
+        width:90%;
+        padding:0 5%;
+        height:0.8rem;
+        line-height:0.8rem;
+        text-align:right;
+    }
+    .line{
+        width: 100%;
+        height: 0.2rem;
+        background-color: #f2f2f2;
+    }
+    .bottom-wrap{
+        width: 90%;
+        padding: 0 5%;
+        height: 1rem;
+        line-height: 1rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        background-color: #ffffff;
+        .item-btn{
+            height: 0.6rem;
+            text-align: center;
+            color: #646464;
+            border: 1px solid #646464;
+            border-radius: 0.30rem;
+            line-height: 0.6rem;
+            font-size: 0.26rem
+        }
+        .cancel-roder{
+            width: 1.4rem;
+            margin-right: 0.2rem
+        }
+        .payment{
+            width: 1.4rem
+        }
+    }
+}
+.list-wrap{
+    width:7.5rem;
+    height:100%;
+    max-height:100%;
+    overflow: hidden;
+        ul{
+        min-height:105%;
+        }
+        .tip{
+        position:absolute;
+        color:#666;
+        font-size:0.28rem;
+        height:0.4rem;
+        line-height:0.4rem;
+        text-align:center;
+        width:100%;
+        &.top-tip{
+        top:-30px;
+        z-index:9999;
+        i{
+            font-size:0.4rem;
+            line-height:0.4rem;
+            margin-right:0.2rem;
+            transition: all .4s;
+            transform:rotate(0);
+            vertical-align: middle;
+            display:inline-block;
+            &.rotate{
+            transform:rotate(180deg);
+            }
+        }
+        }
+        &.bottom-tip{
+        bottom: -50px;
+        &.up-move{
+            bottom:30px;
+        }
+        }
+    }
+}
+.release{
+    width: 100%;
+}
+</style>

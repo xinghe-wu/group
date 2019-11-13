@@ -1,0 +1,61 @@
+{
+  "_from": "vue2-toast@^2.0.2",
+  "_id": "vue2-toast@2.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-nBqf3kM7tXTbz+dBjQkFxQDFWzcxWBbuH32YG9jS0APPQnEOwdYVU5wVXh0Y0w+vb+RE/OAZ2zb0PPM94BGk5Q==",
+  "_location": "/vue2-toast",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "vue2-toast@^2.0.2",
+    "name": "vue2-toast",
+    "escapedName": "vue2-toast",
+    "rawSpec": "^2.0.2",
+    "saveSpec": null,
+    "fetchSpec": "^2.0.2"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue2-toast/-/vue2-toast-2.1.0.tgz",
+  "_shasum": "3cb7f11684b5896e52d494d0635587f453279722",
+  "_spec": "vue2-toast@^2.0.2",
+  "_where": "C:\\Users\\Administrator\\Desktop\\公众号",
+  "author": {
+    "name": "linxin"
+  },
+  "bugs": {
+    "url": "https://github.com/lin-xin/vue-toast/issues",
+    "email": "2981207131@qq.com"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A mobile toast plugin for vue2.",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "homepage": "https://github.com/lin-xin/vue-toast#readme",
+  "keywords": [
+    "vue.js",
+    "vue-plugin",
+    "toast"
+  ],
+  "license": "ISC",
+  "main": "lib/index.js",
+  "name": "vue2-toast",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lin-xin/vue-toast.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "2.1.0"
+}

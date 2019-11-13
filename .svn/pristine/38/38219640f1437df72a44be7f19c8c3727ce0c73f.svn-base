@@ -1,0 +1,45 @@
+{
+  "_from": "vpay@^1.0.3",
+  "_id": "vpay@1.0.3",
+  "_inBundle": false,
+  "_integrity": "sha512-GLfqsf6j7FvTpRDHxGg9DSeXczKoFU7sQyn+FVzqk60dZyT1YxYWOxoYu0MFyGNTmb+sZc0L6rCokftxa+J0DQ==",
+  "_location": "/vpay",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "vpay@^1.0.3",
+    "name": "vpay",
+    "escapedName": "vpay",
+    "rawSpec": "^1.0.3",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.3"
+  },
+  "_requiredBy": [
+    "#DEV:/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vpay/-/vpay-1.0.3.tgz",
+  "_shasum": "23a059e093ff625f00b9bedc61a6e59e8b2605f1",
+  "_spec": "vpay@^1.0.3",
+  "_where": "C:\\Users\\Administrator\\Desktop\\公众号",
+  "author": {
+    "name": "1563940776@qq.com"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "基于vue项目的移动端支付密码框插件",
+  "keywords": [
+    "vpay",
+    "vue",
+    "vue-pay",
+    "pay-password",
+    "password"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "vpay",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.3"
+}

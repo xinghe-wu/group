@@ -1,0 +1,15 @@
+Recently updated (since 2019-09-11)
+  Today:
+    [32m→[39m autoprefixer@7.2.6 › browserslist@2.11.3 › electron-to-chromium@^1.3.30([32m1.3.261[39m) [90m(12:02:35)[39m
+    [32m→[39m friendly-errors-webpack-plugin@1.7.0 › error-stack-parser@^2.0.0([32m2.0.4[39m) [90m(08:58:18)[39m
+    [32m→[39m friendly-errors-webpack-plugin@1.7.0 › error-stack-parser@2.0.4 › stackframe@^1.1.0([32m1.1.0[39m) [90m(08:27:36)[39m
+    [32m→[39m webpack-dev-server@2.11.5 › http-proxy-middleware@0.19.1 › http-proxy@^1.17.0([32m1.18.0[39m) [90m(09:41:09)[39m
+  2019-09-16
+    [32m→[39m optimize-css-assets-webpack-plugin@3.2.1 › cssnano@4.1.10 › cssnano-preset-default@4.0.7 › postcss-colormin@4.0.3 › browserslist@4.7.0 › node-releases@^1.1.29([32m1.1.32[39m) [90m(20:16:36)[39m
+    [32m→[39m css-loader@0.28.11 › cssnano@3.10.0 › autoprefixer@6.7.7 › caniuse-db@^1.0.30000634([32m1.0.30000995[39m) [90m(12:03:41)[39m
+  2019-09-13
+    [32m→[39m vue-awesome-swiper@3.1.3 › swiper@^4.0.7([32m4.5.1[39m) [90m(21:06:21)[39m
+  2019-09-12
+    [32m→[39m css-loader@0.28.11 › cssnano@3.10.0 › postcss-calc@5.3.1 › reduce-css-calc@1.3.0 › reduce-function-call@^1.0.1([32m1.0.3[39m) [90m(13:35:24)[39m
+  2019-09-11
+    [32m→[39m vue-loader@13.7.3 › vue-hot-reload-api@^2.2.0([32m2.3.4[39m) [90m(16:26:12)[39m
